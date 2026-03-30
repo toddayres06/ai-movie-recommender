@@ -2,7 +2,7 @@ import { useState } from "react"
 import SearchBar from "../components/SearchBar"
 import { searchMovies } from "../api/movies"
 
-export default function Home(){
+function Home(){
 
   const [movies,setMovies] = useState([])
 
@@ -35,3 +35,5 @@ export default function Home(){
     </div>
   )
 }
+
+export default Home
