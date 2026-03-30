@@ -4,11 +4,23 @@ import { searchMovies } from "../api/movies"
 
 function Home(){
 
-  const [movies,setMovies] = useState([])
+  const [movies, setMovies] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
 
   async function handleSearch(query){
-    const results = await searchMovies(query)
-    setMovies(results)
+    try {
+      setIsLoading(true)
+      setHasSearched(true)
+
+      const results = await searchMovies(query)
+      setMovies(results)
+
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return(
@@ -16,13 +28,28 @@ function Home(){
 
       <SearchBar onSearch={handleSearch}/>
 
+      {/* Loading State */}
+      {isLoading && (
+        <p className="mt-6">Loading...</p>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && hasSearched && movies.length === 0 && (
+        <p className="mt-6">No results found</p>
+      )}
+
+      {/* Results */}
       <div className="grid grid-cols-4 gap-6 mt-10">
 
-        {movies.map(movie =>(
+        {!isLoading && movies.map(movie =>(
           <div key={movie.id}>
 
             <img
-             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                  : "https://via.placeholder.com/300x450"
+              }
             />
 
             <p className="mt-2">{movie.title}</p>
