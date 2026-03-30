@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import SearchBar from "../components/SearchBar"
 import { searchMovies } from "../api/movies"
+import notAvailable from "../assets/notAvailable.jpg"
 
 function Home(){
 
@@ -42,19 +44,23 @@ function Home(){
       <div className="grid grid-cols-4 gap-6 mt-10">
 
         {!isLoading && movies.map(movie =>(
-          <div key={movie.id}>
+          
+          <Link to={`/movie/${movie.id}`} key={movie.id}>
+            <div className="cursor-pointer hover:scale-105 transition">
 
-            <img
-              src={
-                movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                  : "https://via.placeholder.com/300x450"
-              }
-            />
+              <img
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : notAvailable
+                }
+              />
 
-            <p className="mt-2">{movie.title}</p>
+              <p className="mt-2">{movie.title}</p>
 
-          </div>
+            </div>
+          </Link>
+
         ))}
 
       </div>
