@@ -40,11 +40,15 @@ app.post("/recommend", async (req, res) => {
       }
     )
 
+    const content = response.data.choices[0].message.content
+
+    res.json({ result: content })
+
     res.json(response.data)
 
   } catch (err) {
     console.error(err.response?.data || err.message)
-    res.status(500).json({ error: "Failed to fetch recommendations" })
+    res.status(500).json({ error: "AI request failed" })
   }
 
 })
