@@ -80,14 +80,19 @@ function MovieDetails(){
             AI Recommendations
           </h2>
 
-          {recommendations.map((item, index) => (
-            <div
-              key={index}
-              className="bg-gray-800 p-4 rounded"
-            >
-              {item}
-            </div>
-          ))}
+          {recommendations.map((item, index) => {
+            const [title, reason] = item.split(" - ")
+
+            return (
+              <div
+                key={index}
+                className="bg-gray-800 p-4 rounded"
+              >
+                <p className="font-semibold">{title}</p>
+                <p className="text-sm text-gray-300 mt-1">{reason}</p>
+              </div>
+            )
+          })}
 
         </div>
       )}

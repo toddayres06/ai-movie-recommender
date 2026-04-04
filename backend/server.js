@@ -28,7 +28,18 @@ app.post("/recommend", async (req, res) => {
         messages: [
           {
             role: "user",
-            content: `Suggest 5 movies similar to ${movie}. Explain briefly why each is similar.`
+            content: `
+              List 5 movies similar to "${movie}".
+
+              Format EXACTLY like this:
+              Movie Title - short reason
+
+              Rules:
+              - No numbering
+              - No bullet points
+              - One movie per line
+              - Keep each line concise
+              `
           }
         ]
       },
