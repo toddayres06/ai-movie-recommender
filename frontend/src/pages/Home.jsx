@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 import SearchBar from "../components/SearchBar"
 import { searchMovies } from "../api/movies"
@@ -9,13 +11,35 @@ function Home(){
   const [movies, setMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  const [query, setQuery] = useState("")
 
-  async function handleSearch(query){
+  const [searchParams] = useSearchParams()
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state?.movies) {
+      setMovies(location.state.movies)
+      setQuery(location.state.query)
+      setHasSearched(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    const q = searchParams.get("q")
+
+    if (q && !hasSearched) {
+      handleSearch(q)
+    }
+  }, [])
+
+  async function handleSearch(searchQuery){
     try {
       setIsLoading(true)
       setHasSearched(true)
+      setQuery(searchQuery)
 
-      const results = await searchMovies(query)
+      const results = await searchMovies(searchQuery)
       setMovies(results)
 
     } catch (err) {
@@ -45,7 +69,11 @@ function Home(){
 
         {!isLoading && movies.map(movie =>(
           
-          <Link to={`/movie/${movie.id}`} key={movie.id}>
+          <Link
+            to={`/movie/${movie.id}`}
+            state={{ movies, query }}
+            key={movie.id}
+          >
             <div className="cursor-pointer hover:scale-105 transition">
 
               <img

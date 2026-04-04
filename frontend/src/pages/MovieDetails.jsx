@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { getMovieDetails } from "../api/movies"
 import { getRecommendations } from "../api/recommend"
 import notAvailable from "../assets/notAvailable.jpg"
@@ -11,6 +13,18 @@ function MovieDetails(){
 
   const { id } = useParams()
   const [movie, setMovie] = useState(null)
+
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  function handleBack() {
+    navigate("/", {
+      state: {
+        movies: location.state?.movies,
+        query: location.state?.query
+      }
+    })
+  }
 
   async function handleRecommend() {
     try {
@@ -46,6 +60,13 @@ function MovieDetails(){
 
   return (
     <div className="p-10 bg-black text-white min-h-screen">
+
+      <button
+        onClick={handleBack}
+        className="mb-4 text-blue-400 underline"
+      >
+        ← Back to results
+      </button>
 
       <h1 className="text-3xl font-bold">{movie.title}</h1>
 
