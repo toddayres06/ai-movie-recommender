@@ -26,7 +26,7 @@ function Home(){
   }
 
   return(
-    <div className="p-10">
+    <div className="p-10 bg-black text-white min-h-screen">
 
       <SearchBar onSearch={handleSearch}/>
 

@@ -6,7 +6,7 @@ import notAvailable from "../assets/notAvailable.jpg"
 
 function MovieDetails(){
 
-  const [recommendations, setRecommendations] = useState("")
+  const [recommendations, setRecommendations] = useState([])
   const [loadingAI, setLoadingAI] = useState(false)
 
   const { id } = useParams()
@@ -15,8 +15,17 @@ function MovieDetails(){
   async function handleRecommend() {
     try {
       setLoadingAI(true)
+
       const data = await getRecommendations(movie.title)
-      setRecommendations(data)
+
+      // Convert string → array
+      const parsed = data
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line !== "")
+
+      setRecommendations(parsed)
+
     } catch (err) {
       console.error(err)
     } finally {
@@ -36,7 +45,7 @@ function MovieDetails(){
   if (!movie) return <p className="p-10">Loading...</p>
 
   return (
-    <div className="p-10 text-white">
+    <div className="p-10 bg-black text-white min-h-screen">
 
       <h1 className="text-3xl font-bold">{movie.title}</h1>
 
@@ -44,7 +53,7 @@ function MovieDetails(){
         className="mt-6"
         src={
           movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
             : notAvailable
         }
       />
@@ -53,17 +62,34 @@ function MovieDetails(){
 
       <button
         onClick={handleRecommend}
+        disabled={loadingAI}
         className="mt-6 bg-blue-600 px-4 py-2 rounded disabled:opacity-50"
       >
-        Get AI Recommendations
+        {loadingAI ? "Generating..." : "Get AI Recommendations"}
       </button>
 
-      {loadingAI && <p className="mt-4">Generating recommendations...</p>}
+      {loadingAI && (
+        <p className="mt-4">Generating recommendations...</p>
+      )}
 
-      {recommendations && (
-        <p className="mt-4 whitespace-pre-wrap text-black">
-          {recommendations}
-        </p>
+      {/* ✅ NEW ARRAY-BASED UI */}
+      {recommendations.length > 0 && (
+        <div className="mt-6 space-y-3">
+
+          <h2 className="text-xl font-semibold">
+            AI Recommendations
+          </h2>
+
+          {recommendations.map((item, index) => (
+            <div
+              key={index}
+              className="bg-gray-800 p-4 rounded"
+            >
+              {item}
+            </div>
+          ))}
+
+        </div>
       )}
 
     </div>
