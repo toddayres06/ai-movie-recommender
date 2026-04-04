@@ -63,7 +63,7 @@ function MovieDetails(){
 
       <button
         onClick={handleBack}
-        className="mb-4 text-blue-400 underline"
+        className="mt-6 bg-blue-600 px-4 py-3 rounded w-full sm:w-auto"
       >
         ← Back to results
       </button>
@@ -71,7 +71,7 @@ function MovieDetails(){
       <h1 className="text-3xl font-bold">{movie.title}</h1>
 
       <img
-        className="mt-6"
+        className="mt-6 w-full max-w-sm rounded"
         src={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`

@@ -50,7 +50,7 @@ function Home(){
   }
 
   return(
-    <div className="p-10 bg-black text-white min-h-screen">
+    <div className="p-4 sm:p-6 md:p-10 bg-black text-white min-h-screen">
 
       <SearchBar onSearch={handleSearch}/>
 
@@ -65,8 +65,7 @@ function Home(){
       )}
 
       {/* Results */}
-      <div className="grid grid-cols-4 gap-6 mt-10">
-
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-10">
         {!isLoading && movies.map(movie =>(
           
           <Link
@@ -82,9 +81,10 @@ function Home(){
                     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                     : notAvailable
                 }
+                className="w-full h-auto rounded"
               />
 
-              <p className="mt-2">{movie.title}</p>
+              <p className="mt-2 text-sm sm:text-base">{movie.title}</p>
 
             </div>
           </Link>
