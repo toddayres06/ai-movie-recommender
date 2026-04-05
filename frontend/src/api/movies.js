@@ -1,28 +1,17 @@
 import axios from "axios"
 
-const API_KEY = import.meta.env.VITE_TMDB_KEY
+// 🔁 Replace with your actual Render backend URL
+const BASE_URL = "https://ai-movie-recommender-qew1.onrender.com"
 
 export async function searchMovies(query) {
-  const res = await axios.get(
-    "https://api.themoviedb.org/3/search/movie",
-    {
-      params: {
-        api_key: API_KEY,
-        query
-      }
-    }
-  )
-  return res.data.results
+  const res = await axios.get(`${BASE_URL}/search`, {
+    params: { query }
+  })
+
+  return res.data
 }
 
 export async function getMovieDetails(id) {
-  const res = await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}`,
-    {
-      params: {
-        api_key: API_KEY
-      }
-    }
-  )
+  const res = await axios.get(`${BASE_URL}/movie/${id}`)
   return res.data
 }

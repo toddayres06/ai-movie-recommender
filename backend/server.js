@@ -55,13 +55,54 @@ app.post("/recommend", async (req, res) => {
 
     res.json({ result: content })
 
-    res.json(response.data)
-
   } catch (err) {
     console.error(err.response?.data || err.message)
     res.status(500).json({ error: "AI request failed" })
   }
 
+})
+
+app.get("/search", async (req, res) => {
+  const { query } = req.query
+
+  try {
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/search/movie",
+      {
+        params: {
+          api_key: process.env.TMDB_KEY,
+          query
+        }
+      }
+    )
+
+    res.json(response.data.results)
+
+  } catch (err) {
+    console.error(err.response?.data || err.message)
+    res.status(500).json({ error: "TMDB search failed" })
+  }
+})
+
+app.get("/movie/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}`,
+      {
+        params: {
+          api_key: process.env.TMDB_KEY
+        }
+      }
+    )
+
+    res.json(response.data)
+
+  } catch (err) {
+    console.error(err.response?.data || err.message)
+    res.status(500).json({ error: "TMDB details failed" })
+  }
 })
 
 const PORT = process.env.PORT || 5000
